@@ -4,6 +4,9 @@ import org.hamcrest.Description;
 import org.hamcrest.DiagnosingMatcher;
 import org.hamcrest.Matcher;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Tests whether the value is an instance of a class.
  * Classes of basic types will be converted to the relevant "Object" classes
@@ -25,16 +28,20 @@ public class IsInstanceOf extends DiagnosingMatcher<Object> {
     }
 
     private static Class<?> matchableClass(Class<?> expectedClass) {
-      if (boolean.class.equals(expectedClass)) return Boolean.class;
-      if (byte.class.equals(expectedClass)) return Byte.class;
-      if (char.class.equals(expectedClass)) return Character.class;
-      if (double.class.equals(expectedClass)) return Double.class;
-      if (float.class.equals(expectedClass)) return Float.class;
-      if (int.class.equals(expectedClass)) return Integer.class;
-      if (long.class.equals(expectedClass)) return Long.class;
-      if (short.class.equals(expectedClass)) return Short.class;
-      return expectedClass;
+        Map<Class<?>, Class<?>> primitiveToWrapper = new HashMap<>();
+        primitiveToWrapper.put(boolean.class, Boolean.class);
+        primitiveToWrapper.put(byte.class, Byte.class);
+        primitiveToWrapper.put(char.class, Character.class);
+        primitiveToWrapper.put(double.class, Double.class);
+        primitiveToWrapper.put(float.class, Float.class);
+        primitiveToWrapper.put(int.class, Integer.class);
+        primitiveToWrapper.put(long.class, Long.class);
+        primitiveToWrapper.put(short.class, Short.class);
+
+        Class<?> result = primitiveToWrapper.get(expectedClass);
+        return result == null ? expectedClass : result;
     }
+
 
     @Override
     protected boolean matches(Object item, Description mismatch) {
