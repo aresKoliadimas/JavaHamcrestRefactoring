@@ -29,37 +29,40 @@ public abstract class BaseDescription implements Description {
     public Description appendValue(Object value) {
         if (value == null) {
             append("null");
-        } else if (value instanceof String) {
+            return this;
+        }
+
+        String description = descriptionOf(value);
+        char typeIdentifier = getTypeIdentifier(value);
+
+        if (value instanceof String || value instanceof Character) {
+            append('"');
             toJavaSyntax((String) value);
-        } else if (value instanceof Character) {
             append('"');
-            toJavaSyntax((Character) value);
-            append('"');
-        } else if (value instanceof Byte) {
-            append('<');
-            append(descriptionOf(value));
-            append("b>");
-        } else if (value instanceof Short) {
-            append('<');
-            append(descriptionOf(value));
-            append("s>");
-        } else if (value instanceof Long) {
-            append('<');
-            append(descriptionOf(value));
-            append("L>");
-        } else if (value instanceof Float) {
-            append('<');
-            append(descriptionOf(value));
-            append("F>");
         } else if (value.getClass().isArray()) {
             appendValueList("[",", ","]", new ArrayIterator(value));
         } else {
             append('<');
-            append(descriptionOf(value));
+            append(description);
+            append(typeIdentifier);
             append('>');
         }
         return this;
     }
+
+    private char getTypeIdentifier(Object value) {
+        if (value instanceof Byte) {
+            return 'b';
+        } else if (value instanceof Short) {
+            return 's';
+        } else if (value instanceof Long) {
+            return 'L';
+        } else if (value instanceof Float) {
+            return 'F';
+        }
+        return '\0';
+    }
+
 
     private String descriptionOf(Object value) {
         try {
