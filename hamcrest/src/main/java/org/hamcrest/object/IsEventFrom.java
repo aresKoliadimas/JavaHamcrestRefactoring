@@ -34,7 +34,7 @@ public class IsEventFrom extends TypeSafeDiagnosingMatcher<EventObject> {
     }
 
     private boolean eventHasSameSource(EventObject ev) {
-        return ev.getSource() == source;
+        return ev != null && ev.getSource().equals(source);
     }
 
     @Override

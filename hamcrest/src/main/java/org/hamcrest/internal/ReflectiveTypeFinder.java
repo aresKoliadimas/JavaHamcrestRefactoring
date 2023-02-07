@@ -40,7 +40,7 @@ public class ReflectiveTypeFinder {
   }
 
   public Class<?> findExpectedType(Class<?> fromClass) {
-    for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
+    for (Class<?> c = fromClass; !c.equals(Object.class); c = c.getSuperclass()) {
         for (Method method : c.getDeclaredMethods()) {
             if (canObtainExpectedTypeFrom(method)) {
                 return expectedTypeFrom(method);

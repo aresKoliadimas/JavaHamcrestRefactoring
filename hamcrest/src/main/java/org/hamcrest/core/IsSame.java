@@ -17,7 +17,7 @@ public class IsSame<T> extends BaseMatcher<T> {
 
     @Override
     public boolean matches(Object arg) {
-        return arg == object;
+        return object != null && arg.equals(object);
     }
 
     @Override
